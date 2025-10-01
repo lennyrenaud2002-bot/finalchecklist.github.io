@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist Commercial - Selectra</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Contenu principal vide (focus sur sidebar) -->
+        <main class="main-content">
+            <div class="welcome-message">
+                <h1>🎯 Interface Commercial Selectra</h1>
+                <p>Utilisez la checklist à droite pour gérer votre appel client</p>
+            </div>
+        </main>
+
+        <!-- Sidebar droite -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>✅ Checklist Commercial</h2>
+                <div class="progress-indicator">
+                    <span id="completed-items">0</span> / <span id="total-items">0</span>
+                </div>
+            </div>
+
+            <!-- Section informations client -->
+            <div class="section client-info">
+                <h3>📋 Informations Client</h3>
+                <div class="form-group">
+                    <label class="form-label">Nom complet</label>
+                    <input type="text" class="form-control" name="client_nom" placeholder="Nom Prénom">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Téléphone</label>
+                    <input type="tel" class="form-control" name="client_tel" placeholder="06 XX XX XX XX">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name="client_email" placeholder="client@email.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Adresse</label>
+                    <input type="text" class="form-control" name="client_adresse" placeholder="Adresse complète">
+                </div>
+            </div>
+
+            <!-- Section validation de base -->
+            <div class="section basic-validation">
+                <h3>🔐 Validations Obligatoires</h3>
+                <label class="checklist-item">
+                    <input type="checkbox" name="rgpd_accepte">
+                    <span class="checkmark"></span>
+                    RGPD - Accord collecte données
+                </label>
+                <label class="checklist-item">
+                    <input type="checkbox" name="enregistrement_accepte">
+                    <span class="checkmark"></span>
+                    Enregistrement d'appel accepté
+                </label>
+                <label class="checklist-item">
+                    <input type="checkbox" name="eligibilite_confirmee">
+                    <span class="checkmark"></span>
+                    Éligibilité confirmée
+                </label>
+            </div>
+
+            <!-- Section services payants -->
+            <div class="section services-payants">
+                <h3>💰 Services Payants</h3>
+                <div class="services-counter">
+                    <span>Minimum: <strong>1</strong> service requis</span>
+                    <span>Total disponible: <strong>2</strong> services</span>
+                </div>
+                
+                <!-- AXA -->
+                <label class="checklist-item service-item" data-service="axa">
+                    <input type="checkbox" name="service_axa">
+                    <span class="checkmark"></span>
+                    <span class="service-label">
+                        AXA Assistance
+                        <span class="service-details" id="axa-details"></span>
+                    </span>
+                    <button type="button" class="btn-config" onclick="openServiceModal('axa')" title="Configurer forfait">⚙️</button>
+                </label>
+
+                <!-- OFFSET -->
+                <label class="checklist-item service-item" data-service="offset">
+                    <input type="checkbox" name="service_offset">
+                    <span class="checkmark"></span>
+                    <span class="service-label">
+                        OFFSET
+                        <span class="service-details" id="offset-details"></span>
+                    </span>
+                    <button type="button" class="btn-config" onclick="openServiceModal('offset')" title="Configurer forfait">⚙️</button>
+                </label>
+            </div>
+
+            <!-- Section validation finale -->
+            <div class="section final-validation">
+                <h3>✅ Finalisation</h3>
+                <label class="checklist-item">
+                    <input type="checkbox" name="contrat_signe">
+                    <span class="checkmark"></span>
+                    Contrat signé
+                </label>
+                <label class="checklist-item">
+                    <input type="checkbox" name="paiement_configure">
+                    <span class="checkmark"></span>
+                    Paiement configuré
+                </label>
+                <label class="checklist-item">
+                    <input type="checkbox" name="rdv_planifie">
+                    <span class="checkmark"></span>
+                    RDV de suivi planifié
+                </label>
+            </div>
+
+            <!-- Actions -->
+            <div class="section actions">
+                <button type="button" class="btn btn--primary btn--full-width" onclick="exportSummary()" disabled id="export-btn">
+                    📄 Exporter Résumé
+                </button>
+                <button type="button" class="btn btn--secondary btn--full-width" onclick="resetForm()">
+                    🔄 Réinitialiser
+                </button>
+            </div>
+        </aside>
+
+        <!-- Modal AXA -->
+        <div class="modal hidden" id="axa-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>🛡️ AXA Assistance - Choisir Forfait</h3>
+                    <button type="button" class="modal-close" onclick="closeModal('axa-modal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Sélectionnez le forfait AXA Assistance adapté au client :</p>
+                    <div class="plan-options">
+                        <label class="plan-option">
+                            <input type="radio" name="axa_plan" value="3.99" data-label="3,99€/mois (Télécom)">
+                            <div class="plan-card">
+                                <h4>📞 Télécom</h4>
+                                <div class="plan-price">3,99€/mois</div>
+                                <p>Protection installations télécom et internet</p>
+                            </div>
+                        </label>
+                        <label class="plan-option">
+                            <input type="radio" name="axa_plan" value="6.99" data-label="6,99€/mois (Énergie+)">
+                            <div class="plan-card">
+                                <h4>⚡ Énergie+</h4>
+                                <div class="plan-price">6,99€/mois</div>
+                                <p>Protection complète énergie + équipements</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--secondary" onclick="closeModal('axa-modal')">Annuler</button>
+                    <button type="button" class="btn btn--primary" onclick="confirmServicePlan('axa')">Confirmer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal OFFSET -->
+        <div class="modal hidden" id="offset-modal">
+            <div class="modal-content modal-large">
+                <div class="modal-header">
+                    <h3>🌱 OFFSET - Choisir Forfait Carbone</h3>
+                    <button type="button" class="modal-close" onclick="closeModal('offset-modal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Sélectionnez le palier de compensation carbone :</p>
+                    <div class="plan-options offset-plans">
+                        <label class="plan-option">
+                            <input type="radio" name="offset_plan" value="2.99" data-label="2,99€/mois - 2.24t">
+                            <div class="plan-card">
+                                <div class="plan-price">2,99€/mois</div>
+                                <div class="plan-carbon">2,24 tonnes CO₂</div>
+                            </div>
+                        </label>
+                        <label class="plan-option">
+                            <input type="radio" name="offset_plan" value="3.99" data-label="3,99€/mois - 2.98t">
+                            <div class="plan-card">
+                                <div class="plan-price">3,99€/mois</div>
+                                <div class="plan-carbon">2,98 tonnes CO₂</div>
+                            </div>
+                        </label>
+                        <label class="plan-option">
+                            <input type="radio" name="offset_plan" value="4.99" data-label="4,99€/mois - 3.59t">
+                            <div class="plan-card">
+                                <div class="plan-price">4,99€/mois</div>
+                                <div class="plan-carbon">3,59 tonnes CO₂</div>
+                            </div>
+                        </label>
+                        <label class="plan-option">
+                            <input type="radio" name="offset_plan" value="5.99" data-label="5,99€/mois - 4.49t">
+                            <div class="plan-card">
+                                <div class="plan-price">5,99€/mois</div>
+                                <div class="plan-carbon">4,49 tonnes CO₂</div>
+                            </div>
+                        </label>
+                        <label class="plan-option">
+                            <input type="radio" name="offset_plan" value="7.5" data-label="7,50€/mois - 5.4t">
+                            <div class="plan-card plan-recommended">
+                                <div class="plan-badge">⭐ Recommandé</div>
+                                <div class="plan-price">7,50€/mois</div>
+                                <div class="plan-carbon">5,4 tonnes CO₂</div>
+                            </div>
+                        </label>
+                        <label class="plan-option">
+                            <input type="radio" name="offset_plan" value="14.99" data-label="14,99€/mois - 11.34t">
+                            <div class="plan-card">
+                                <div class="plan-price">14,99€/mois</div>
+                                <div class="plan-carbon">11,34 tonnes CO₂</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--secondary" onclick="closeModal('offset-modal')">Annuler</button>
+                    <button type="button" class="btn btn--primary" onclick="confirmServicePlan('offset')">Confirmer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
